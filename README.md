@@ -75,8 +75,6 @@ Cloudflare (CDN/Security), jQuery (JavaScript Library)
 | Service Detection | Nmap sV | HAProxy 1.3.1 to 1.9.0, load balancer |
 | Web Fingerprint | Wappalyzer | Cloudflare, jQuery |
 
-## Full Report
-See Project1_Recon_Fingerprinting.docx for the complete write up with screenshots and references.
 
 ## Ethics
 All activity was performed against a platform explicitly authorized for security testing. No scanning or access attempts were made against any system outside this scope.

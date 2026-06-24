@@ -1,86 +1,74 @@
-# Reconnaissance and Fingerprinting
+# Web Application Penetration Testing
 
-Passive and active reconnaissance against hackthissite.org, a legal cybersecurity training platform. Demonstrates the information gathering phase of an ethical penetration test.
+Hands-on penetration testing against DVWA (Damn Vulnerable Web Application), a deliberately vulnerable environment designed for security training. Identifies and exploits common vulnerabilities from the OWASP Top 10.
 
 ## Skills Demonstrated
-OSINT and Google dorking, domain intelligence gathering, internet wide asset discovery, network scanning and service enumeration, web technology fingerprinting.
+SQL injection exploitation, cross site scripting detection, insecure file upload testing, CSRF vulnerability identification, HTTP request manipulation, and vulnerability assessment documentation.
 
 ## Tools
-Kali Linux, Nmap 7.99, Whois, Shodan, Wappalyzer
+Kali Linux, DVWA, Burp Suite Community Edition, Firefox, Apache2, MariaDB, PHP
 
 ## Target
-hackthissite.org, authorized for ethical hacking and security testing. No exploitation performed.
-
----
-## Process
-
-## Google Dorks
-
-![Google dork filetype:pdf results](Project_Figures/google_dork_pdf.png)
-
-![Google dork inurl:admin results](Project_Figures/google_dork_admin.png)
-
-Indexed PDFs and articles publicly accessible on mirror.hackthissite.org.
+DVWA deployed locally on Kali Linux. Security level set to Low. No external systems accessed.
 
 ---
 
-## WHOIS Lookup
+## Environment Setup
 
-![WHOIS output](Project_Figures/whois.png)
+![DVWA security set to Low](dvwa_security.png)
 
-Registrar: Porkbun LLC, Created: 2003-08-10, Expires: 2026-08-10, Nameservers: buddyns.com
-
----
-
-## Shodan Search
-
-![Shodan results](Project_Figures/shodan.png)
-
-7 results, Top ports: 443 and 6697, Location: Dunkerque France, TLSv1.2, SSL: HARICA DV TLS RSA
+![Burp Suite Intercept on](burp_intercept.png)
 
 ---
 
-## Nmap Port Scan
+## SQL Injection
 
-![Nmap -sS scan](Project_Figures/nmap_ss.png)
+![Burp Suite intercepted request](sqli_burp.png)
 
-Port 22 closed, Port 80 open (http), Port 443 open (https), IP: 137.74.187.102
+![SQL injection results](sqli_results.png)
 
----
-
-## Service Detection
-
-![Nmap -sV scan](Project_Figures/nmap_sv.png)
-
-Port 80 and 443 running HAProxy 1.3.1 to 1.9.0, Device identified as load balancer
+Payload `1' OR '1'='1` bypassed authentication and dumped all database records.
 
 ---
 
-## Wappalyzer Fingerprinting
+## Cross Site Scripting (XSS)
 
-![Wappalyzer output](Project_Figures/wappalyzer.png)
+![XSS alert popup](xss_alert.png)
 
-Cloudflare (CDN/Security), jQuery (JavaScript Library)
+Payload `<script>alert('XSS')</script>` executed in browser confirming reflected XSS.
 
 ---
 
-## Summary
+## File Upload
 
-| Technique | Tool | Finding |
-|---|---|---|
-| Google Dorks | Google | Indexed PDFs and OSINT articles publicly accessible |
-| WHOIS | whois | Registrar: Porkbun LLC, Created: 2003-08-10 |
-| Shodan | Shodan | 7 results, ports 443 and 6697, TLSv1.2 |
-| Port Scan | Nmap sS | Port 22 closed, ports 80 and 443 open |
-| Service Detection | Nmap sV | HAProxy 1.3.1 to 1.9.0, load balancer |
-| Web Fingerprint | Wappalyzer | Cloudflare, jQuery |
+![Shell upload success](fileupload_success.png)
 
+PHP web shell (`shell.php`) uploaded with no file type validation in place.
+
+---
+
+## CSRF
+
+![CSRF password change form](csrf_form.png)
+
+Password change form confirmed to have no CSRF token.
+
+---
+
+## Findings
+
+| Vulnerability | Severity | Status | Remediation |
+|---|---|---|---|
+| SQL Injection | Critical | Exploited | Use prepared statements |
+| XSS Reflected | High | Exploited | Sanitize and encode user input |
+| File Upload | Critical | Exploited | Validate file type and content |
+| CSRF | Medium | Identified | Implement CSRF tokens |
 
 ## Ethics
-All activity was performed against a platform explicitly authorized for security testing. No scanning or access attempts were made against any system outside this scope.
+All testing performed against a locally deployed deliberately vulnerable application. No external systems targeted.
 
 ## References
-Lyon, G. (n.d.). Nmap: The network mapper. https://nmap.org
-Shodan. (n.d.). Shodan search engine. https://www.shodan.io
-Wappalyzer. (n.d.). Wappalyzer: Technology profiler. https://www.wappalyzer.com
-Wilhelm, T., & Engebretson, P. (2026). The basics of hacking and penetration testing (3rd ed.). Syngress.
+DVWA Project. (n.d.). Damn Vulnerable Web Application (DVWA). https://dvwa.co.uk  
+OWASP Foundation. (2025). OWASP Top 10:2025. https://owasp.org/Top10/  
+Stuttard, D., & Pinto, M. (2011). The web application hacker's handbook. John Wiley & Sons.  
+Weidman, G. (2014). Penetration testing: a hands-on introduction to hacking. No Starch Press.
